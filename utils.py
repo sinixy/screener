@@ -1,4 +1,6 @@
 from datetime import datetime, time
+from tradingview_screener import Query
+import pandas as pd
 
 from config import NY_TIMEZONE
 
@@ -19,3 +21,8 @@ def get_current_session():
         return 'POST-MARKET'
     else:
         return 'CLOSED'
+    
+def exec_query(query: Query) -> pd.DataFrame:
+    _, df = query.get_scanner_data()
+    df['ticker'] = df.ticker.str.split(':').apply(lambda x: x[-1])
+    return df

@@ -4,7 +4,7 @@ from yfinance import Ticker
 from time import sleep
 import winsound
 
-from utils import get_current_session
+from utils import get_current_session, exec_query
 
     
 BASE_FILTER = [
@@ -60,7 +60,7 @@ class Screener:
         return
     
     def _scan_pre(self):
-        n, init_df = QUERIES['PRE_LONG_MOMENTUM_QUERY'].get_scanner_data()
+        init_df = exec_query(QUERIES['PRE_LONG_MOMENTUM_QUERY'])
         tickers = init_df.ticker.to_list()
         for i, row in init_df.iterrows():
             print(f'================== {row.ticker} - {row.premarket_change :.2f}% ==================')
@@ -70,7 +70,7 @@ class Screener:
 
         while get_current_session() == 'PRE-MARKET':
 
-            n, df = QUERIES['PRE_LONG_MOMENTUM_QUERY'].get_scanner_data()
+            df = exec_query(QUERIES['PRE_LONG_MOMENTUM_QUERY'])
 
             for i, row in df.iterrows():
                 if row.ticker in tickers:
@@ -82,7 +82,8 @@ class Screener:
                 for news in self.find_news(row.ticker):
                     print(f'[{news["providerPublishTime"]}]', news['title'])
                 print()
-                
+            
+            print(f'[{datetime.now().replace(microsecond=0)}] Refreshed')
             sleep(10)
 
     def find_news(self, ticker: str, starting_from: datetime = datetime.combine(datetime.today(), time.min)):
@@ -94,3 +95,8 @@ class Screener:
                 n['providerPublishTime'] = dt
                 news.append(n)
         return news
+
+
+if __name__ == '__main__':
+    screener = Screener()
+    screener.scan()
