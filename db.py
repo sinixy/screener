@@ -33,7 +33,7 @@ if __name__ == '__main__':
     db.cursor.execute('''CREATE TABLE "users" (
         "user_id"	INTEGER NOT NULL UNIQUE,
         "role"	INTEGER NOT NULL DEFAULT 0,
-        PRIMARY KEY("role")
+        PRIMARY KEY("user_id")
     );''')
     db.connection.commit()
     db.create_user(RECEIVER_ID, role=RoleEnum.ADMIN)
