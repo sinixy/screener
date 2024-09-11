@@ -10,6 +10,8 @@ class Database:
         self.cursor = self.connection.cursor()
 
     def create_user(self, user_id: int, role: int = RoleEnum.USER):
+        if user := self.get_user(user_id):
+            return
         if role not in [RoleEnum.USER, RoleEnum.ADMIN]:
             raise ValueError('Invalid role')
         self.cursor.execute("INSERT INTO users VALUES (?, ?)", (user_id, role))
