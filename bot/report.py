@@ -1,3 +1,5 @@
+from asyncio import sleep
+
 from bot import bot
 from db import db
 from utils import stringify_mc
@@ -28,10 +30,18 @@ async def report(ticker: Ticker, is_initial_scan: bool = False):
            f'Sector: {ticker.sector}\n\n' \
            + technical_section + filing_section + news_section
     
+    msg_cnt = 0
     for user in db.get_users():
         if user[1] == 0 and is_initial_scan: continue
-        await bot.send_message(
-            user[0],
-            text,
-            disable_web_page_preview=True
-        )
+        try:
+            await bot.send_message(
+                user[0],
+                text,
+                disable_web_page_preview=True
+            )
+        except Exception as e:
+            print(user[0], e)
+            continue
+        msg_cnt += 1
+        if msg_cnt % 10 == 0:
+            await sleep(0.3)

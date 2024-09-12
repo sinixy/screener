@@ -43,7 +43,7 @@ class QueryEnum:
         select('description', 'sector', 'close', 'premarket_volume', 'market_cap_basic', 'premarket_change', 'premarket_close'). \
         where(
             *BASE_FILTER,
-            Column('premarket_change') > 4,
+            Column('premarket_change') > 3,
             Column('market_cap_basic') > 30e6
         ). \
         order_by('premarket_change', ascending=False)
@@ -52,7 +52,7 @@ class QueryEnum:
         select('description', 'sector', 'close', 'premarket_volume', 'market_cap_basic', 'premarket_change', 'premarket_close'). \
         where(
             *BASE_FILTER,
-            Column('premarket_change') < -4,
+            Column('premarket_change') < -3,
             Column('market_cap_basic') > 30e6
         ). \
         order_by('premarket_change', ascending=True)
@@ -61,7 +61,7 @@ class QueryEnum:
         select('description', 'sector', 'close', 'postmarket_volume', 'market_cap_basic', 'postmarket_change', 'postmarket_close'). \
         where(
             *BASE_FILTER,
-            Column('postmarket_change') > 4,
+            Column('postmarket_change') > 3,
             Column('market_cap_basic') > 30e6
         ). \
         order_by('postmarket_change', ascending=False)
@@ -70,7 +70,7 @@ class QueryEnum:
         select('description', 'sector', 'close', 'postmarket_volume', 'market_cap_basic', 'postmarket_change', 'postmarket_close'). \
         where(
             *BASE_FILTER,
-            Column('postmarket_change') < -4,
+            Column('postmarket_change') < -3,
             Column('market_cap_basic') > 30e6
         ). \
         order_by('postmarket_change', ascending=True)
