@@ -66,4 +66,7 @@ class Ticker:
 
     @asyncify
     def get_full_technicals(self):
-        return finvizfinance(self.symbol).ticker_fundament()
+        try:
+            return finvizfinance(self.symbol).ticker_fundament()
+        except Exception:
+            return None
