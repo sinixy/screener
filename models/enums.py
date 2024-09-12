@@ -20,21 +20,21 @@ class QueryEnum:
     ]
 
     DAY_LONG_MOMENTUM = Query(). \
-        select('description', 'sector', 'close', 'change|5', 'market_cap_basic', 'Value.Traded|15'). \
+        select('description', 'sector', 'close', 'change|5', 'market_cap_basic', 'Value.Traded|5'). \
         where(
             *BASE_FILTER,
             Column('change|5').above_pct('ATRP', 1),
-            Column('Value.Traded|15') > 5e5,
+            Column('Value.Traded|5') > 5e5,
             Column('market_cap_basic') > 20e6
         ). \
         order_by('change|5', ascending=False)
     
     DAY_SHORT_MOMENTUM = Query(). \
-        select('description', 'sector', 'close', 'change|5', 'market_cap_basic', 'Value.Traded|15'). \
+        select('description', 'sector', 'close', 'change|5', 'market_cap_basic', 'Value.Traded|5'). \
         where(
             *BASE_FILTER,
             Column('change|5').below_pct('ATRP', -1),
-            Column('Value.Traded|15') > 5e5,
+            Column('Value.Traded|5') > 5e5,
             Column('market_cap_basic') > 20e6
         ). \
         order_by('change|5', ascending=True)
