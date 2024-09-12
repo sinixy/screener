@@ -20,22 +20,22 @@ class QueryEnum:
     ]
 
     DAY_LONG_MOMENTUM = Query(). \
-        select('description', 'sector', 'close', 'change|5', 'market_cap_basic', 'Value.Traded|5'). \
+        select('description', 'sector', 'close', 'change|5', 'market_cap_basic', 'Value.Traded|15'). \
         where(
             *BASE_FILTER,
-            Column('change|5') > 2,
-            Column('Value.Traded|5') > 0.5e6,
-            Column('market_cap_basic') > 30e6
+            Column('change|5').above_pct('ATRP', 1),
+            Column('Value.Traded|15') > 5e5,
+            Column('market_cap_basic') > 20e6
         ). \
         order_by('change|5', ascending=False)
     
     DAY_SHORT_MOMENTUM = Query(). \
-        select('description', 'sector', 'close', 'change|5', 'market_cap_basic', 'Value.Traded|5'). \
+        select('description', 'sector', 'close', 'change|5', 'market_cap_basic', 'Value.Traded|15'). \
         where(
             *BASE_FILTER,
-            Column('change|5') < -2,
-            Column('Value.Traded|5') > 0.5e6,
-            Column('market_cap_basic') > 30e6
+            Column('change|5').below_pct('ATRP', -1),
+            Column('Value.Traded|15') > 5e5,
+            Column('market_cap_basic') > 20e6
         ). \
         order_by('change|5', ascending=True)
     
@@ -43,8 +43,8 @@ class QueryEnum:
         select('description', 'sector', 'close', 'premarket_volume', 'market_cap_basic', 'premarket_change', 'premarket_close'). \
         where(
             *BASE_FILTER,
-            Column('premarket_change') > 3,
-            Column('market_cap_basic') > 30e6
+            Column('premarket_change').above_pct('ATRP', 1),
+            Column('market_cap_basic') > 20e6
         ). \
         order_by('premarket_change', ascending=False)
     
@@ -52,8 +52,8 @@ class QueryEnum:
         select('description', 'sector', 'close', 'premarket_volume', 'market_cap_basic', 'premarket_change', 'premarket_close'). \
         where(
             *BASE_FILTER,
-            Column('premarket_change') < -3,
-            Column('market_cap_basic') > 30e6
+            Column('premarket_change').below_pct('ATRP', -1),
+            Column('market_cap_basic') > 20e6
         ). \
         order_by('premarket_change', ascending=True)
     
@@ -61,8 +61,8 @@ class QueryEnum:
         select('description', 'sector', 'close', 'postmarket_volume', 'market_cap_basic', 'postmarket_change', 'postmarket_close'). \
         where(
             *BASE_FILTER,
-            Column('postmarket_change') > 3,
-            Column('market_cap_basic') > 30e6
+            Column('postmarket_change').above_pct('ATRP', 1),
+            Column('market_cap_basic') > 20e6
         ). \
         order_by('postmarket_change', ascending=False)
     
@@ -70,7 +70,7 @@ class QueryEnum:
         select('description', 'sector', 'close', 'postmarket_volume', 'market_cap_basic', 'postmarket_change', 'postmarket_close'). \
         where(
             *BASE_FILTER,
-            Column('postmarket_change') < -3,
-            Column('market_cap_basic') > 30e6
+            Column('postmarket_change').below_pct('ATRP', -1),
+            Column('market_cap_basic') > 20e6
         ). \
         order_by('postmarket_change', ascending=True)
