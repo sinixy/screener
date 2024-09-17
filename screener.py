@@ -59,7 +59,10 @@ class Screener:
         losers = await Screener.exec_query(QueryEnum.PRE_SHORT_MOMENTUM)
         df = pd.concat([gainers, losers])
         if len(df) > 0:
-            df['premarket_value'] = df.eval('close / 2 * premarket_volume')
+            try:
+                df['premarket_value'] = df.eval('(close + premarket_close) / 2 * premarket_volume')
+            except:
+                return pd.DataFrame()
             df = df[df['premarket_value'] > 5e5]
         return df
 
@@ -74,7 +77,10 @@ class Screener:
         losers = await Screener.exec_query(QueryEnum.POST_SHORT_MOMENTUM)
         df = pd.concat([gainers, losers])
         if len(df) > 0:
-            df['postmarket_value'] = df.eval('close / 2 * postmarket_volume')
+            try:
+                df['postmarket_value'] = df.eval('(close + postmarket_close) / 2 * postmarket_volume')
+            except:
+                return pd.DataFrame()
             df = df[df['postmarket_value'] > 5e5]
         return df
 
